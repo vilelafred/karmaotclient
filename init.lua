@@ -16,8 +16,8 @@ SERVER_LIST = {
 
 -- If you don't use updater or other service, set it to updater = ""
 Services = {
-  website = "", -- currently not used
-  updater = "",
+  website = "http://72.62.11.29:8088", -- currently not used
+  updater = "http://72.62.11.29:8088/api/updater_advanced.php",
   stats = "",
   crash = "",
   feedback = "",
@@ -138,9 +138,9 @@ if type(Services.crash) == 'string' and Services.crash:len() > 4 and g_modules.g
   g_modules.ensureModuleLoaded("crash_reporter")
 end
 
--- run updater, must use data.zip
-if type(Services.updater) == 'string' and Services.updater:len() > 4 
-  and g_resources.isLoadedFromArchive() and g_modules.getModule("updater") then
+-- run updater (data.zip recomendado; funciona também com arquivos soltos)
+if type(Services.updater) == 'string' and Services.updater:len() > 4
+  and g_modules.getModule("updater") then
   g_modules.ensureModuleLoaded("updater")
   return Updater.init(loadModules)
 end
