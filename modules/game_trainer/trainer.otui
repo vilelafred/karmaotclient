@@ -1,0 +1,122 @@
+TrainerAddSpell < MainWindow
+  id: TrainerAddSpell
+  size: 275 100
+  text: Edit Spell
+
+  TextEdit
+    id: text
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    margin-top: 5
+
+  Button
+    id: buttonClose
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    size: 45 21
+    text: Close
+
+  Button
+    id: buttonOk
+    anchors.right: prev.left
+    margin-right: 5
+    anchors.bottom: parent.bottom
+    size: 45 21
+    text: Save
+    
+TrainerCheckBox < CheckBox
+  anchors.left: parent.left
+  anchors.right: parent.right
+  anchors.top: prev.bottom
+  height: 16
+  margin: 10 10 0 5
+  @onCheckChange: modules.game_trainer.setOption(self:getId(), self:isChecked())
+
+TrainerTextEdit < TextEdit
+  anchors.left: parent.left
+  anchors.top: prev.bottom
+  width: 137
+  margin: 0 5 0 5
+  @onClick: modules.game_trainer.inputSpell(self:getId())
+
+TrainerSpinBox < SpinBox
+  anchors.top: prev.top
+  anchors.left: prev.right
+  anchors.right: parent.right
+  margin: 0 5 0 3
+  minimum: 1
+  maximum: 100
+  focusable: true
+  @onValueChange: modules.game_trainer.setOption(self:getId(), self:getValue())
+    
+MiniWindow
+  id: trainerWindow
+  !text: tr('Karma Tools')
+  height: 240
+  icon: /images/topButtons/inventory
+  @onClose: modules.game_trainer.onMiniWindowClose()
+  &save: true
+  &autoOpen: 11
+
+  MiniWindowContents
+    Button
+      id: enableButton
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin: 5
+      @onClick: modules.game_trainer.toggle()
+      
+      $on:
+        text: Karma Tools ON
+        color: #00AA00
+        
+      $!on:
+        text: Karma Tools OFF
+        color: #FF0000
+
+    TrainerCheckBox
+      id: checkMT
+      !text: tr('Mana Training')
+
+    TrainerTextEdit
+      id: spellMT
+      !text: tr('spell')
+
+    TrainerSpinBox
+      id: manaMT
+
+    TrainerCheckBox
+      id: checkRM
+      !text: tr('Rune Maker')
+
+    TrainerTextEdit
+      id: spellRM
+      !text: tr('spell')
+
+    TrainerSpinBox
+      id: manaRM
+
+    TrainerCheckBox
+      id: checkIdle
+      text: Anti-Idle
+
+    TrainerCheckBox
+      id: checkFood
+      text: Auto-Eat Food
+      margin-top: 3
+
+    TrainerCheckBox
+      id: checkTrade
+      text: Auto Trade Announce
+      margin-top: 3
+
+    TrainerTextEdit
+      id: tradeMessage
+      !text: tr('trade message')
+
+    TrainerSpinBox
+      id: tradeInterval
+      minimum: 30
+      maximum: 600

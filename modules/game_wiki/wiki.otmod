@@ -1,0 +1,9 @@
+Module
+  name: game_wiki
+  description: In-game wiki
+  author: bowt
+  reloadable: true
+  sandboxed: true
+  scripts: [ wiki ]
+  @onLoad: init()
+  @onUnload: terminate()

@@ -1,0 +1,11 @@
+Module
+  name: game_trainer
+  description: Anti-Idle, Auto-Eat, RuneMaker & Mana Training
+  author: F.Almeida#8019 (felipepips)
+  sandboxed: true
+  scripts: [ trainer ]
+  @onLoad: init()
+  @onUnload: terminate()
+  autoload: true
+  dependencies:
+    - game_interface

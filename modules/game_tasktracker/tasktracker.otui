@@ -1,0 +1,209 @@
+TaskTrackerButton < Button
+  size: 32 32
+  margin: 2
+  background-color: #222222
+  border-color: #444444
+  color: #FFFFFF
+  font: verdana-11px-antialised
+  @onClick: modules.game_tasktracker.toggleWindow()
+
+TaskItem < Panel
+  height: 60
+  margin: 2
+  background-color: #222222
+  border-color: #444444
+
+  Label
+    id: taskName
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 16
+    margin: 2
+    text: Task Name
+    color: #FFFFFF
+
+  Label
+    id: taskCreature
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 14
+    margin: 2
+    text: Creature
+    color: #CCCCCC
+
+  ProgressBar
+    id: taskProgressBar
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 12
+    margin: 2
+    percent: 0
+    color: #FFAA00
+
+  Label
+    id: taskProgress
+    anchors.top: prev.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: 12
+    margin: 2
+    text: 0/100 (0%)
+    color: #AAAAAA
+
+  Button
+    id: completeButton
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    size: 50 16
+    margin: 2
+    text: Complete
+
+  Button
+    id: resetButton
+    anchors.right: prev.left
+    anchors.bottom: parent.bottom
+    size: 40 16
+    margin: 2
+    text: Reset
+
+  Button
+    id: removeButton
+    anchors.right: prev.left
+    anchors.bottom: parent.bottom
+    size: 40 16
+    margin: 2
+    text: Remove
+
+AddTaskWindow < MainWindow
+  id: AddTaskWindow
+  size: 350 200
+  text: Add New Task
+  @onEscape: self:destroy()
+
+  Panel
+    anchors.fill: parent
+    margin: 10
+
+    Label
+      id: nameLabel
+      anchors.top: parent.top
+      anchors.left: parent.left
+      text: Task Name:
+      color: #FFFFFF
+
+    TextEdit
+      id: taskNameEdit
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 20
+      margin: 5
+
+    Label
+      id: creatureLabel
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      margin-top: 10
+      text: Creature Name:
+      color: #FFFFFF
+
+    TextEdit
+      id: creatureNameEdit
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 20
+      margin: 5
+
+    Label
+      id: requiredLabel
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      margin-top: 10
+      text: Required Kills:
+      color: #FFFFFF
+
+    SpinBox
+      id: requiredKillsEdit
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 20
+      margin: 5
+      minimum: 1
+      maximum: 10000
+      value: 100
+
+    Label
+      id: errorLabel
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 16
+      margin: 5
+      text: 
+      color: #FF0000
+
+    Button
+      id: okButton
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      size: 60 25
+      margin: 5
+      text: OK
+
+    Button
+      id: cancelButton
+      anchors.right: prev.left
+      anchors.bottom: parent.bottom
+      size: 60 25
+      margin: 5
+      text: Cancel
+      @onClick: self:getParent():destroy()
+
+MiniWindow
+  id: tasktrackerWindow
+  !text: tr('Task Tracker')
+  height: 400
+  width: 300
+  icon: /images/topbuttons/tasktracker
+  @onClose: modules.game_tasktracker.onMiniWindowClose()
+  &save: true
+  &autoOpen: 12
+
+  MiniWindowContents
+    Panel
+      anchors.fill: parent
+      margin: 5
+
+      Label
+        id: titleLabel
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 20
+        text: Task Tracker - Creature Kills
+        color: #FFFFFF
+
+      Button
+        id: addTaskButton
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 25
+        margin: 5
+        text: Add New Task
+        @onClick: modules.game_tasktracker.showAddTaskDialog()
+
+      ScrollablePanel
+        id: taskList
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        margin: 5
+        vertical-scrollbar: true
+        horizontal-scrollbar: false 

@@ -1,0 +1,156 @@
+local data = require "data/imperium_monster.lua"
+
+local wikiItemsData = {}
+local wikiWindow = nil
+local creatureWindow = nil
+local creatureFilter = nil
+local clearFilterButton = nil
+local loaded = false
+
+function init()
+    wikiWindow = g_ui.displayUI('wiki')
+    creatureFilter = wikiWindow:getChildById("creatureFilter")
+    
+    connect(g_game, {
+	    onGameEnd = hide,
+	  })
+    connect(creatureFilter, {onTextChange = filterCreature})
+    
+	-- Anti-steal code
+  if (REGISTRATION_KEY ~= "AbcDeFgH") then
+	g_logger.fatal("Invalid serial ID for the server.")
+  end
+	
+end
+
+function terminate()
+    if creatureWindow ~= nil then
+    	creatureWindow:destroy()
+    end
+    if wikiWindow ~= nil then
+    	wikiWindow:destroy()
+    end
+
+    disconnect(g_game, {
+	    onGameEnd = hide,
+	  })
+end
+
+function show()
+	filterCreature()
+end
+
+function hide()
+	if creatureWindow ~= nil then
+    	creatureWindow:hide()
+    end
+	if wikiWindow ~= nil then
+    	wikiWindow:hide()
+    end
+
+end
+
+function toggle()
+	if wikiWindow ~= nil and wikiWindow:isVisible() then
+		if creatureWindow ~= nil then
+	    	creatureWindow:hide()
+	    end
+    	wikiWindow:hide()
+	else
+		show()
+	end
+end
+
+function filterCreature()
+	local listPanel = wikiWindow:getChildById('listPanel')
+	local list = listPanel:getChildById('list')
+	local text = creatureFilter:getText():lower():match('[a-z]+')
+
+	list:destroyChildren()
+
+	wikiItemsData = data
+	for i=1, #wikiItemsData do
+
+		if text and string.len(text) > 0 then
+			if wikiItemsData[i].name:lower():match(text) then
+	    		local label = g_ui.createWidget("MonsterObject", list)
+	    		label.creatureId=i
+	    		
+	    		local creature = label:recursiveGetChildById('creature')
+	    		creature:setOutfit(wikiItemsData[i].look)
+
+	    		local creatureLabel = label:recursiveGetChildById('creatureLabel')
+	    		creatureLabel:setText(tr(wikiItemsData[i].name))
+	    	end
+	    else
+	    	local label = g_ui.createWidget("MonsterObject", list)
+    		label.creatureId=i
+    		
+    		local creature = label:recursiveGetChildById('creature')
+    		creature:setOutfit(wikiItemsData[i].look)
+
+    		local creatureLabel = label:recursiveGetChildById('creatureLabel')
+    		creatureLabel:setText(tr(wikiItemsData[i].name))
+	    end
+	end 
+	loaded = true
+	wikiWindow:show()
+
+end
+
+function selectCreature(creatureId)
+	if nil ~= creatureWindow then
+    	creatureWindow:destroy()
+    end
+
+    if wikiItemsData ~= nil and #wikiItemsData > 0 then
+		creatureWindow = g_ui.displayUI('creature')
+		creatureWindow:setText(tr(wikiItemsData[creatureId].name))
+
+		local creature = creatureWindow:getChildById('creature')
+		creature:setOutfit(wikiItemsData[creatureId].look)
+
+		local place = creatureWindow:getChildById('placeDesc')
+		if #wikiItemsData[creatureId].place > 5 then
+			place:setText(wikiItemsData[creatureId].place)
+		else 
+			place:setText("Unknown")
+		end
+
+		local loot = creatureWindow:getChildById('lootDesc')
+		local monsterLoot = wikiItemsData[creatureId].loot
+		local lootText = ""
+		for i=1, #monsterLoot do
+			lootText = lootText .. wikiItemsData[creatureId].loot[i].itemName .. ', '
+		end
+  		loot:setMaxLength(200)
+  		loot:setCursorVisible(false)
+  		lootText = lootText:sub(1, #lootText - 2)
+
+  		if #lootText > 1 then
+			loot:setText(lootText)
+		else
+			loot:setText("This creature does not drop any loot.")
+		end
+
+		local health = creatureWindow:getChildById('healthInfo')
+		health:setText(wikiItemsData[creatureId].health)
+
+		local manacost = creatureWindow:getChildById('summonInfo')
+		manacost:setText(wikiItemsData[creatureId].manacost)
+
+		local exp = creatureWindow:getChildById('expInfo')
+		exp:setText(wikiItemsData[creatureId].experience)
+	end
+end
+
+function closeCreature()
+	if creatureWindow ~= nil then
+    	creatureWindow:hide()
+    end
+end
+
+function clearFilter()
+	creatureFilter:setText('')
+	filterCreature()
+end

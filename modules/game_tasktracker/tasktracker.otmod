@@ -1,0 +1,9 @@
+Module
+  name: game_tasktracker
+  description: Task Tracker System - Track creature kills for tasks
+  author: Assistant
+  website: https://github.com/otclient/otclient
+  sandboxed: true
+  scripts: [ tasktracker ]
+  @onLoad: init()
+  @onUnload: terminate() 

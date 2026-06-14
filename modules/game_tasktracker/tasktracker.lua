@@ -1,0 +1,648 @@
+-- Task Tracker System for OTCV8
+-- Permite ao player acompanhar kills de tasks e gerenciar suas tasks
+
+local config = {
+  saveInterval = 30, -- segundos para salvar automaticamente
+  maxTasks = 50, -- máximo de tasks que podem ser criadas
+  defaultTasks = {
+    {name = "Rotworms", creature = "rotworm", kills = 0, required = 100, completed = false},
+    {name = "Rats", creature = "rat", kills = 0, required = 50, completed = false},
+    {name = "Spiders", creature = "spider", kills = 0, required = 200, completed = false},
+    {name = "Trolls", creature = "troll", kills = 0, required = 100, completed = false},
+    {name = "Orcs", creature = "orc", kills = 0, required = 150, completed = false},
+    {name = "Minotaurs", creature = "minotaur", kills = 0, required = 300, completed = false},
+    {name = "Cyclops", creature = "cyclops", kills = 0, required = 500, completed = false},
+    {name = "Dragons", creature = "dragon", kills = 0, required = 1000, completed = false},
+  }
+}
+
+-- Variables
+local taskWindow = nil
+local taskButton = nil
+local taskList = {}
+local lastSave = 0
+local saveEvent = nil
+
+-- Basic Module Functions
+function init()
+  print("Task Tracker: Initializing...")
+  
+  connect(g_game, {
+    onGameStart = online,
+    onGameEnd = offline
+  })
+  
+  -- Create the task tracker window
+  taskWindow = g_ui.loadUI('tasktracker', modules.game_interface.getRightPanel())
+  taskWindow:disableResize()
+  taskWindow:setup()
+
+  -- Create the task tracker button (similar to trainer button)
+  createTaskTrackerButton()
+
+  -- Register commands
+  registerCommands()
+
+  if g_game.isOnline() then
+    online()
+  end
+  
+  print("Task Tracker: Initialized successfully!")
+end
+
+function terminate()
+  disconnect(g_game, {
+    onGameStart = online,
+    onGameEnd = offline
+  })
+  offline()
+  destroy()
+end
+
+function online()
+  load()
+  startAutoSave()
+end
+
+function offline()
+  save()
+  stopAutoSave()
+end
+
+-- Create Task Tracker Button
+function createTaskTrackerButton()
+  -- Get the game interface panel
+  local gamePanel = modules.game_interface.getRightPanel()
+  if not gamePanel then
+    print("Task Tracker: Could not find game panel")
+    return
+  end
+
+  -- Create the button
+  taskButton = g_ui.createWidget('TaskTrackerButton', gamePanel)
+  taskButton:setId('taskTrackerButton')
+  taskButton:setText('Task Tracker')
+  taskButton:setImageSource('/images/topbuttons/tasktracker')
+  taskButton:setOn(false)
+  
+  -- Position the button above the trainer button
+  local trainerButton = gamePanel:recursiveGetChildById('trainerButton')
+  if trainerButton then
+    -- Position above trainer button
+    taskButton:setAnchor('bottom', trainerButton, 'top')
+    taskButton:setMargin('bottom', 5)
+  else
+    -- If no trainer button, position in top-right
+    taskButton:setAnchor('top', gamePanel, 'top')
+    taskButton:setAnchor('right', gamePanel, 'right')
+    taskButton:setMargin('top', 10)
+    taskButton:setMargin('right', 10)
+  end
+  
+  -- Set button click event
+  taskButton.onClick = function()
+    toggleWindow()
+  end
+  
+  print("Task Tracker: Button created successfully!")
+end
+
+-- Commands
+function registerCommands()
+  print("Task Tracker: Registering commands...")
+  
+  -- Command to open task tracker
+  modules.client_terminal.addCommand({
+    name = 'tasktracker',
+    aliases = {'tt', 'tasks'},
+    description = 'Open Task Tracker window',
+    usage = 'tasktracker',
+    callback = function()
+      show()
+      return true
+    end
+  })
+
+  -- Command to add task
+  modules.client_terminal.addCommand({
+    name = 'addtask',
+    aliases = {'at'},
+    description = 'Add a new task',
+    usage = 'addtask <name> <creature> <required>',
+    callback = function(params)
+      if #params < 3 then
+        print('Usage: addtask <name> <creature> <required>')
+        print('Example: addtask "Kill Dragons" dragon 1000')
+        return false
+      end
+      
+      local name = params[1]
+      local creature = params[2]
+      local required = tonumber(params[3])
+      
+      if not required or required < 1 then
+        print('Required kills must be a number greater than 0')
+        return false
+      end
+      
+      local success, message = addTask(name, creature, required)
+      print(message)
+      return success
+    end
+  })
+
+  -- Command to list tasks
+  modules.client_terminal.addCommand({
+    name = 'listtasks',
+    aliases = {'lt', 'taskslist'},
+    description = 'List all tasks',
+    usage = 'listtasks',
+    callback = function()
+      if #taskList == 0 then
+        print('No tasks found.')
+        return true
+      end
+      
+      print('=== TASK LIST ===')
+      for i, task in pairs(taskList) do
+        local status = task.completed and '[COMPLETED]' or '[IN PROGRESS]'
+        local percentage = math.floor((task.kills / task.required) * 100)
+        print(string.format('%d. %s (%s) - %s %d/%d (%d%%)', 
+          i, task.name, task.creature, status, task.kills, task.required, percentage))
+      end
+      return true
+    end
+  })
+
+  -- Command to remove task
+  modules.client_terminal.addCommand({
+    name = 'removetask',
+    aliases = {'rt'},
+    description = 'Remove a task by index',
+    usage = 'removetask <index>',
+    callback = function(params)
+      if #params < 1 then
+        print('Usage: removetask <index>')
+        print('Use "listtasks" to see task indexes')
+        return false
+      end
+      
+      local index = tonumber(params[1])
+      if not index then
+        print('Index must be a number')
+        return false
+      end
+      
+      local success, message = removeTask(index)
+      print(message)
+      return success
+    end
+  })
+
+  -- Command to reset task
+  modules.client_terminal.addCommand({
+    name = 'resettask',
+    aliases = {'rest'},
+    description = 'Reset task progress by index',
+    usage = 'resettask <index>',
+    callback = function(params)
+      if #params < 1 then
+        print('Usage: resettask <index>')
+        print('Use "listtasks" to see task indexes')
+        return false
+      end
+      
+      local index = tonumber(params[1])
+      if not index then
+        print('Index must be a number')
+        return false
+      end
+      
+      local success, message = resetTask(index)
+      print(message)
+      return success
+    end
+  })
+
+  -- Command to complete task
+  modules.client_terminal.addCommand({
+    name = 'completetask',
+    aliases = {'ct'},
+    description = 'Mark task as completed by index',
+    usage = 'completetask <index>',
+    callback = function(params)
+      if #params < 1 then
+        print('Usage: completetask <index>')
+        print('Use "listtasks" to see task indexes')
+        return false
+      end
+      
+      local index = tonumber(params[1])
+      if not index then
+        print('Index must be a number')
+        return false
+      end
+      
+      local success, message = completeTask(index)
+      print(message)
+      return success
+    end
+  })
+
+  -- Command to add kills manually
+  modules.client_terminal.addCommand({
+    name = 'addkills',
+    aliases = {'ak'},
+    description = 'Add kills to a task manually',
+    usage = 'addkills <creature> <amount>',
+    callback = function(params)
+      if #params < 2 then
+        print('Usage: addkills <creature> <amount>')
+        print('Example: addkills rotworm 10')
+        return false
+      end
+      
+      local creature = params[1]
+      local amount = tonumber(params[2])
+      
+      if not amount or amount < 1 then
+        print('Amount must be a number greater than 0')
+        return false
+      end
+      
+      local success = updateTaskKills(creature, amount)
+      if success then
+        print(string.format('Added %d kills to %s tasks', amount, creature))
+      else
+        print(string.format('No task found for creature: %s', creature))
+      end
+      return success
+    end
+  })
+
+  -- Command to show help
+  modules.client_terminal.addCommand({
+    name = 'taskhelp',
+    aliases = {'th'},
+    description = 'Show Task Tracker help',
+    usage = 'taskhelp',
+    callback = function()
+      print('=== TASK TRACKER COMMANDS ===')
+      print('tasktracker, tt, tasks - Open Task Tracker window')
+      print('addtask, at - Add new task')
+      print('listtasks, lt - List all tasks')
+      print('removetask, rt - Remove task by index')
+      print('resettask, rest - Reset task progress')
+      print('completetask, ct - Mark task as completed')
+      print('addkills, ak - Add kills manually')
+      print('taskhelp, th - Show this help')
+      print('')
+      print('Examples:')
+      print('  addtask "Kill Dragons" dragon 1000')
+      print('  listtasks')
+      print('  addkills rotworm 50')
+      print('  completetask 1')
+      return true
+    end
+  })
+  
+  print("Task Tracker: Commands registered successfully!")
+end
+
+-- Settings
+function load()
+  local settingsFile = modules.client_profiles.getSettingsFilePath("tasktracker.json")
+  if g_resources.fileExists(settingsFile) then
+    local status, result = pcall(function()
+      return json.decode(g_resources.readFileContents(settingsFile))
+    end)
+    if not status then
+      return g_logger.error("Error while reading task tracker settings file. Details: " .. result)
+    end
+    taskList = result
+  else
+    -- Load default tasks
+    taskList = {}
+    for _, task in pairs(config.defaultTasks) do
+      table.insert(taskList, {
+        name = task.name,
+        creature = task.creature,
+        kills = task.kills,
+        required = task.required,
+        completed = task.completed
+      })
+    end
+  end
+  refreshTaskList()
+end
+
+function save()
+  local settingsFile = modules.client_profiles.getSettingsFilePath("tasktracker.json")
+  local status, result = pcall(function() return json.encode(taskList, 2) end)
+  if not status then
+    return g_logger.error("Error while saving task tracker settings. Details: " .. result)
+  end
+
+  if result:len() > 100 * 1024 * 1024 then
+    return g_logger.error("Task tracker file is too big, above 100MB, won't be saved")
+  end
+
+  g_resources.writeFileContents(settingsFile, result)
+  lastSave = g_clock.seconds()
+end
+
+-- Auto save
+function startAutoSave()
+  if saveEvent then
+    removeEvent(saveEvent)
+  end
+  saveEvent = cycleEvent(function()
+    if g_game.isOnline() then
+      save()
+    end
+  end, config.saveInterval * 1000)
+end
+
+function stopAutoSave()
+  if saveEvent then
+    removeEvent(saveEvent)
+    saveEvent = nil
+  end
+end
+
+-- Window functions
+function show()
+  taskWindow:show()
+  taskWindow:raise()
+  taskWindow:focus()
+  if taskButton then
+    taskButton:setOn(true)
+  end
+end
+
+function hide()
+  taskWindow:hide()
+  if taskButton then
+    taskButton:setOn(false)
+  end
+end
+
+function toggleWindow()
+  if taskWindow:isVisible() then
+    hide()
+  else
+    show()
+  end
+end
+
+function onMiniWindowClose()
+  if taskButton then
+    taskButton:setOn(false)
+  end
+end
+
+function destroy()
+  if taskWindow then
+    taskWindow:destroy()
+    taskWindow = nil
+  end
+  if taskButton then
+    taskButton:destroy()
+    taskButton = nil
+  end
+end
+
+-- Task management functions
+function addTask(name, creature, required)
+  if #taskList >= config.maxTasks then
+    return false, "Maximum number of tasks reached"
+  end
+  
+  if not name or name:len() < 2 then
+    return false, "Task name too short"
+  end
+  
+  if not creature or creature:len() < 2 then
+    return false, "Creature name too short"
+  end
+  
+  required = tonumber(required) or 100
+  if required < 1 then
+    return false, "Required kills must be at least 1"
+  end
+  
+  -- Check if task already exists
+  for _, task in pairs(taskList) do
+    if task.creature:lower() == creature:lower() then
+      return false, "Task for this creature already exists"
+    end
+  end
+  
+  table.insert(taskList, {
+    name = name,
+    creature = creature:lower(),
+    kills = 0,
+    required = required,
+    completed = false
+  })
+  
+  refreshTaskList()
+  save()
+  return true, "Task added successfully"
+end
+
+function removeTask(index)
+  if index and index > 0 and index <= #taskList then
+    table.remove(taskList, index)
+    refreshTaskList()
+    save()
+    return true, "Task removed successfully"
+  end
+  return false, "Invalid task index"
+end
+
+function updateTaskKills(creatureName, kills)
+  creatureName = creatureName:lower()
+  for _, task in pairs(taskList) do
+    if task.creature == creatureName and not task.completed then
+      task.kills = task.kills + kills
+      if task.kills >= task.required then
+        task.completed = true
+        task.kills = task.required
+        print("Task completed: " .. task.name .. " (" .. task.creature .. ")")
+      end
+      refreshTaskList()
+      save()
+      return true
+    end
+  end
+  return false
+end
+
+function resetTask(index)
+  if index and index > 0 and index <= #taskList then
+    taskList[index].kills = 0
+    taskList[index].completed = false
+    refreshTaskList()
+    save()
+    return true, "Task reset successfully"
+  end
+  return false, "Invalid task index"
+end
+
+function completeTask(index)
+  if index and index > 0 and index <= #taskList then
+    taskList[index].kills = taskList[index].required
+    taskList[index].completed = true
+    refreshTaskList()
+    save()
+    return true, "Task marked as completed"
+  end
+  return false, "Invalid task index"
+end
+
+-- UI functions
+function refreshTaskList()
+  if not taskWindow then return end
+  
+  local list = taskWindow:recursiveGetChildById('taskList')
+  if not list then return end
+  
+  list:clearChildren()
+  
+  for i, task in pairs(taskList) do
+    local taskItem = g_ui.createWidget('TaskItem', list)
+    taskItem:setId('task_' .. i)
+    
+    local nameLabel = taskItem:recursiveGetChildById('taskName')
+    local creatureLabel = taskItem:recursiveGetChildById('taskCreature')
+    local progressLabel = taskItem:recursiveGetChildById('taskProgress')
+    local progressBar = taskItem:recursiveGetChildById('taskProgressBar')
+    local completeButton = taskItem:recursiveGetChildById('completeButton')
+    local resetButton = taskItem:recursiveGetChildById('resetButton')
+    local removeButton = taskItem:recursiveGetChildById('removeButton')
+    
+    if nameLabel then
+      nameLabel:setText(task.name)
+      if task.completed then
+        nameLabel:setColor('#00AA00')
+      else
+        nameLabel:setText(task.name)
+        nameLabel:setColor('#FFFFFF')
+      end
+    end
+    
+    if creatureLabel then
+      creatureLabel:setText(task.creature)
+    end
+    
+    if progressLabel then
+      local percentage = math.floor((task.kills / task.required) * 100)
+      progressLabel:setText(task.kills .. '/' .. task.required .. ' (' .. percentage .. '%)')
+    end
+    
+    if progressBar then
+      local percentage = math.min((task.kills / task.required) * 100, 100)
+      progressBar:setPercent(percentage)
+      if task.completed then
+        progressBar:setColor('#00AA00')
+      else
+        progressBar:setColor('#FFAA00')
+      end
+    end
+    
+    if completeButton then
+      completeButton.onClick = function()
+        completeTask(i)
+      end
+      completeButton:setEnabled(not task.completed)
+    end
+    
+    if resetButton then
+      resetButton.onClick = function()
+        resetTask(i)
+      end
+    end
+    
+    if removeButton then
+      removeButton.onClick = function()
+        removeTask(i)
+      end
+    end
+  end
+end
+
+-- Add task dialog
+function showAddTaskDialog()
+  local addWindow = g_ui.createWidget('AddTaskWindow', g_ui.getRootWidget())
+  addWindow:show()
+  addWindow:raise()
+  addWindow:focus()
+  
+  local nameEdit = addWindow:recursiveGetChildById('taskNameEdit')
+  local creatureEdit = addWindow:recursiveGetChildById('creatureNameEdit')
+  local requiredEdit = addWindow:recursiveGetChildById('requiredKillsEdit')
+  local okButton = addWindow:recursiveGetChildById('okButton')
+  local cancelButton = addWindow:recursiveGetChildById('cancelButton')
+  
+  if nameEdit then
+    nameEdit:setText('')
+    nameEdit:focus()
+  end
+  
+  if creatureEdit then
+    creatureEdit:setText('')
+  end
+  
+  if requiredEdit then
+    requiredEdit:setValue(100)
+  end
+  
+  local okFunc = function()
+    local name = nameEdit and nameEdit:getText() or ''
+    local creature = creatureEdit and creatureEdit:getText() or ''
+    local required = requiredEdit and requiredEdit:getValue() or 100
+    
+    local success, message = addTask(name, creature, required)
+    if success then
+      addWindow:destroy()
+    else
+      -- Show error message
+      local errorLabel = addWindow:recursiveGetChildById('errorLabel')
+      if errorLabel then
+        errorLabel:setText(message)
+        errorLabel:setColor('#FF0000')
+      end
+    end
+  end
+  
+  local cancelFunc = function()
+    addWindow:destroy()
+  end
+  
+  if okButton then
+    okButton.onClick = okFunc
+  end
+  
+  if cancelButton then
+    cancelButton.onClick = cancelFunc
+  end
+  
+  addWindow.onEnter = okFunc
+  addWindow.onEscape = cancelFunc
+end
+
+-- Creature kill tracking
+function onCreatureKill(creature)
+  if not creature then return end
+  
+  local creatureName = creature:getName()
+  if creatureName then
+    updateTaskKills(creatureName, 1)
+  end
+end
+
+-- Connect to creature death events
+connect(g_game, {
+  onCreatureDeath = onCreatureKill
+}) 1
