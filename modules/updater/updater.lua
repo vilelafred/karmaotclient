@@ -149,6 +149,12 @@ local function updateFiles(data, keepCurrentFiles)
     scheduledEvent = scheduleEvent(Updater.abort, 20)
     return
   end
+
+  if not g_resources.isLoadedFromArchive() then
+    g_logger.warning("Updater skipped: client must run from data.zip (download fresh KarmaOT-Client.zip)")
+    scheduledEvent = scheduleEvent(Updater.abort, 20)
+    return
+  end
   
   -- update of some files require full client restart
   local forceRestart = false
@@ -178,7 +184,7 @@ local function updateFiles(data, keepCurrentFiles)
     updaterWindow.downloadStatus:hide() 
     scheduledEvent = scheduleEvent(function()
       local restart = binary or (not loadModulesFunction and reloadModules) or forceRestart
-      if newFiles then
+      if newFiles and g_resources.isLoadedFromArchive() then
         g_resources.updateData(finalFiles, not restart)
       end
       if binary then

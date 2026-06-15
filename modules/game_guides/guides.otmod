@@ -1,0 +1,9 @@
+Module
+  name: game_guides
+  description: In-game New Player Guide synced with site API
+  author: KarmaOT
+  website: https://karma-global.com
+  sandboxed: true
+  scripts: [ guides ]
+  @onLoad: init()
+  @onUnload: terminate()

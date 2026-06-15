@@ -1,0 +1,446 @@
+GuideSidebarButton < Button
+  height: 26
+  margin-bottom: 2
+  text-align: left
+  text-offset: 8 0
+  font: verdana-11px-rounded
+
+GuideTableHeader < Panel
+  height: 24
+  background-color: #2a2a2a
+  border-color: #555555
+
+  Label
+    id: colName
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 320
+    margin-left: 8
+    text: Name
+    color: #FFAA00
+    font: verdana-11px-rounded
+
+  Label
+    id: colType
+    anchors.left: prev.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 80
+    text: Type
+    color: #FFAA00
+    font: verdana-11px-rounded
+
+  Label
+    id: colLevel
+    anchors.left: prev.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 60
+    text: Level
+    color: #FFAA00
+    font: verdana-11px-rounded
+
+GuideTableRow < Panel
+  height: 28
+  focusable: true
+  phantom: false
+  background-color: #1e1e1e
+  border-color: #333333
+
+  $hover:
+    background-color: #2a2a2a
+    border-color: #666666
+
+  $focus:
+    background-color: #3a3a3a
+    border-color: #888888
+
+  $on:
+    background-color: #3a3a3a
+    border-color: #FFAA00
+
+  Label
+    id: nameLabel
+    anchors.left: parent.left
+    anchors.verticalCenter: parent.verticalCenter
+    width: 320
+    margin-left: 8
+    color: #FFFFFF
+    font: verdana-11px-rounded
+    phantom: true
+
+  Label
+    id: typeLabel
+    anchors.left: prev.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 80
+    color: #CCCCCC
+    font: verdana-11px-rounded
+    phantom: true
+
+  Label
+    id: levelLabel
+    anchors.left: prev.right
+    anchors.verticalCenter: parent.verticalCenter
+    width: 60
+    color: #FFCC66
+    font: verdana-11px-rounded
+    phantom: true
+
+MainWindow
+  id: guidesWindow
+  !text: tr('New Player Guide')
+  size: 960 620
+  @onEscape: modules.game_guides.hide()
+
+  Panel
+    id: sidebar
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.bottom: footer.top
+    width: 200
+    margin: 8
+    margin-bottom: 4
+    background-color: #1a1a1a
+    border-color: #444444
+    padding: 6
+
+    Label
+      id: sidebarTitle
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 18
+      text-align: center
+      color: #FFAA00
+      font: verdana-11px-rounded
+      !text: tr('Categories')
+
+    GuideSidebarButton
+      id: tabAll
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      text: All Guides
+      @onClick: modules.game_guides.selectTab('all')
+
+    GuideSidebarButton
+      id: tabQuests
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Quests
+      @onClick: modules.game_guides.selectTab('quests')
+
+    GuideSidebarButton
+      id: tabHunts
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Hunts
+      @onClick: modules.game_guides.selectTab('hunts')
+
+    GuideSidebarButton
+      id: tabSystems
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Systems
+      @onClick: modules.game_guides.selectTab('systems')
+
+    GuideSidebarButton
+      id: tabCity
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: City Respawns
+      @onClick: modules.game_guides.selectTab('city')
+
+    GuideSidebarButton
+      id: tabLevel
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Hunts by Level
+      @onClick: modules.game_guides.selectTab('level')
+
+    GuideSidebarButton
+      id: tabRewards
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      text: Level Rewards
+      @onClick: modules.game_guides.selectTab('rewards')
+
+    Label
+      id: searchLabel
+      anchors.bottom: searchEdit.top
+      anchors.left: parent.left
+      margin-bottom: 2
+      text: Search
+      color: #AAAAAA
+      font: verdana-11px-rounded
+
+    TextEdit
+      id: searchEdit
+      anchors.bottom: parent.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 22
+
+  Panel
+    id: listPanel
+    anchors.top: parent.top
+    anchors.left: sidebar.right
+    anchors.right: detailPanel.left
+    anchors.bottom: footer.top
+    margin-top: 8
+    margin-left: 4
+    margin-right: 4
+    margin-bottom: 4
+    background-color: #141414
+    border-color: #444444
+
+    Label
+      id: listTitle
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 20
+      margin: 4
+      text-align: center
+      color: #FFFFFF
+      font: verdana-11px-rounded
+      text: Select a category
+
+    GuideTableHeader
+      id: tableHeader
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-left: 4
+      margin-right: 16
+      margin-top: 2
+
+    ScrollablePanel
+      id: guideList
+      anchors.top: tableHeader.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin: 4
+      margin-right: 12
+      vertical-scrollbar: guideListScroll
+      layout:
+        type: verticalBox
+
+    VerticalScrollBar
+      id: guideListScroll
+      anchors.top: guideList.top
+      anchors.bottom: guideList.bottom
+      anchors.right: parent.right
+      step: 28
+      pixels-scroll: true
+
+  Panel
+    id: detailPanel
+    anchors.top: parent.top
+    anchors.right: parent.right
+    anchors.bottom: footer.top
+    width: 300
+    margin-top: 8
+    margin-right: 8
+    margin-bottom: 4
+    background-color: #1a1a1a
+    border-color: #555555
+    padding: 8
+
+    Label
+      id: detailSection
+      anchors.top: parent.top
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 16
+      text: Details
+      color: #FFAA00
+      font: verdana-11px-rounded
+
+    Label
+      id: detailTitle
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 6
+      text-align: top
+      text-wrap: true
+      color: #FFFFFF
+      font: verdana-11px-rounded
+      text: Select an entry
+
+    Label
+      id: detailMeta
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 4
+      color: #FFCC66
+      font: verdana-11px-rounded
+      text:
+
+    Panel
+      id: mapPanel
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 168
+      margin-top: 8
+      background-color: #0d0d0d
+      border-color: #444444
+      visible: false
+
+      Minimap
+        id: guideMinimap
+        anchors.fill: parent
+        margin: 4
+        draggable: true
+        focusable: false
+        cross: false
+        autowalk: false
+
+    Label
+      id: noCoordsPanel
+      anchors.top: detailMeta.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      height: 168
+      margin-top: 8
+      text-align: center
+      text-wrap: true
+      color: #888888
+      font: verdana-11px-rounded
+      !text: tr('No coordinates yet.\nUse Open Page for location details.')
+      visible: true
+
+    Label
+      id: coordsLabel
+      anchors.top: mapPanel.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      margin-top: 4
+      text-align: center
+      color: #66CCFF
+      font: verdana-11px-rounded
+      text:
+      visible: false
+
+    Label
+      id: detailSummaryLabel
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      margin-top: 8
+      text: Summary
+      color: #AAAAAA
+      font: verdana-11px-rounded
+
+    ScrollablePanel
+      id: detailSummaryScroll
+      anchors.top: prev.bottom
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: actionPanel.top
+      margin-top: 4
+      margin-bottom: 8
+      vertical-scrollbar: detailSummaryBar
+
+      Label
+        id: detailSummary
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        text-wrap: true
+        color: #CCCCCC
+        font: verdana-11px-rounded
+        text: Browse the list and click an entry to see details here.
+
+    VerticalScrollBar
+      id: detailSummaryBar
+      anchors.top: detailSummaryScroll.top
+      anchors.bottom: detailSummaryScroll.bottom
+      anchors.right: detailSummaryScroll.right
+      step: 14
+      pixels-scroll: true
+
+    Panel
+      id: actionPanel
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      height: 56
+
+      Button
+        id: openPageButton
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 24
+        text: Open Full Page
+        enabled: false
+        @onClick: modules.game_guides.openSelectedPage()
+
+      Button
+        id: openVideoButton
+        anchors.top: prev.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        margin-top: 4
+        height: 24
+        text: Watch Video
+        enabled: false
+        @onClick: modules.game_guides.openSelectedVideo()
+
+  Panel
+    id: footer
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    height: 36
+    margin: 8
+    margin-top: 0
+
+    Label
+      id: statusLabel
+      anchors.left: parent.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-left: 4
+      color: #AAAAAA
+      font: verdana-11px-rounded
+      text: Ready
+
+    Label
+      id: introLabel
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.verticalCenter: parent.verticalCenter
+      width: 420
+      text-align: center
+      text-wrap: true
+      color: #888888
+      font: verdana-11px-rounded
+      text:
+
+    Button
+      id: refreshButton
+      anchors.right: closeButton.left
+      anchors.verticalCenter: parent.verticalCenter
+      margin-right: 6
+      width: 80
+      height: 24
+      text: Refresh
+      @onClick: modules.game_guides.fetchFromApi(true)
+
+    Button
+      id: closeButton
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      width: 80
+      height: 24
+      text: Close
+      @onClick: modules.game_guides.hide()

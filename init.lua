@@ -1,13 +1,13 @@
 Decrypt_Name = "KarmaOT-DEV"
 Encrypt_Name = "KarmaOT"
-APP_VERSION = 1341       -- client version for updater and login to identify outdated client
+APP_VERSION = 1344       -- client version for updater and login to identify outdated client
 DEFAULT_LAYOUT = "default" -- on android it's forced to "mobile", check code bellow
 REGISTRATION_KEY = "AbcDeFgH"
 
 -- servers shown in enter game list
 SERVER_LIST = {
   {
-    host = '72.62.11.29',
+    host = '72.62.11.29', -- login.karma-global.com quando DNS propagar
     name = "Karma",
     port = 7171,
     protocol = 772,
@@ -16,7 +16,8 @@ SERVER_LIST = {
 
 -- If you don't use updater or other service, set it to updater = ""
 Services = {
-  website = "http://72.62.11.29:8088", -- currently not used
+  website = "http://72.62.11.29:8088", -- https://karma-global.com quando DNS propagar
+  guides = "http://72.62.11.29:8088/api/guides.json",
   updater = "http://72.62.11.29:8088/api/updater_advanced.php",
   stats = "",
   crash = "",
@@ -138,9 +139,9 @@ if type(Services.crash) == 'string' and Services.crash:len() > 4 and g_modules.g
   g_modules.ensureModuleLoaded("crash_reporter")
 end
 
--- run updater (data.zip recomendado; funciona também com arquivos soltos)
+-- run updater (requer data.zip montado; nao usar com pastas data/modules soltas)
 if type(Services.updater) == 'string' and Services.updater:len() > 4
-  and g_modules.getModule("updater") then
+  and g_resources.isLoadedFromArchive() and g_modules.getModule("updater") then
   g_modules.ensureModuleLoaded("updater")
   return Updater.init(loadModules)
 end

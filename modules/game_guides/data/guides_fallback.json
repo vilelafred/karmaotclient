@@ -1,0 +1,704 @@
+{
+  "version": 3,
+  "updatedAt": "2026-06-14",
+  "baseUrl": "http://72.62.11.29:8088",
+  "intro": "Welcome to KarmaOT. This compact guide helps you get started: hunt routes by city/level, essential quests, custom systems (Forge, Craft), daily bosses, and practical tips — all in the oldschool Tibia style.",
+  "levelRewards": {
+    "title": "How it works — Level Rewards",
+    "description": "When you reach specific levels, each vocation receives a one-time reward. Rewards are organized by vocation and required level, with item icons displayed vertically for clarity.",
+    "pageUrl": "/?leveladv"
+  },
+  "youtubeChannel": "https://www.youtube.com/@KarmaGlobalServer",
+  "guides": [
+    {
+      "id": "anihi",
+      "name": "Annihilator I & II",
+      "type": "Quest",
+      "summary": "Classic team annihilator quest. Requires coordination and strong gear around level 100+.",
+      "pageUrl": "/?subtopic=anihi",
+      "videoUrl": "https://youtu.be/G4KcweUNGyM",
+      "level": "100+",
+      "location": {
+        "x": 33223,
+        "y": 31671,
+        "z": 13,
+        "label": "Annihilator Lever"
+      }
+    },
+    {
+      "id": "demonhelmet",
+      "name": "Demon Helmet",
+      "type": "Quest",
+      "summary": "Challenging quest rewarding the Demon Helmet. Recommended for experienced players.",
+      "pageUrl": "/?subtopic=demonhelmet",
+      "videoUrl": "https://youtu.be/ggDhfy8cXG4",
+      "level": "120+",
+      "location": {
+        "x": 33314,
+        "y": 31592,
+        "z": 15,
+        "label": "Demon Helmet Lever"
+      }
+    },
+    {
+      "id": "horned_helmet",
+      "name": "Horned Helmet",
+      "type": "Quest",
+      "summary": "Quest for the Horned Helmet. A solid mid-level challenge.",
+      "pageUrl": "/?subtopic=horned_helmet",
+      "videoUrl": "https://youtu.be/ontMAj35bpw",
+      "level": "80+",
+      "location": {
+        "x": 33011,
+        "y": 32092,
+        "z": 10,
+        "label": "Horned Helmet Entrance"
+      }
+    },
+    {
+      "id": "goldenhelmet",
+      "name": "Golden Helmet",
+      "type": "Quest",
+      "summary": "High-level quest for the legendary Golden Helmet.",
+      "pageUrl": "/?subtopic=goldenhelmet_quest",
+      "videoUrl": "https://youtu.be/wKuijncYtr0",
+      "level": "150+",
+      "location": {
+        "x": 33403,
+        "y": 31553,
+        "z": 11,
+        "label": "Golden Helmet Lever"
+      }
+    },
+    {
+      "id": "angelbp",
+      "name": "Angel Backpack & Golden Doll",
+      "type": "Quest",
+      "summary": "Obtain the Angel Backpack and Golden Doll through this custom quest.",
+      "pageUrl": "/?subtopic=angelbp",
+      "videoUrl": "https://www.youtube.com/watch?v=_mR3-PvBh8s",
+      "level": null,
+      "location": {
+        "x": 32376,
+        "y": 32141,
+        "z": 8,
+        "label": "Sacrificial Altar Lever"
+      }
+    },
+    {
+      "id": "bootswaterwalking",
+      "name": "Boots of Waterwalking",
+      "type": "Quest",
+      "summary": "Quest for Boots of Waterwalking — walk on water surfaces.",
+      "pageUrl": "/?subtopic=bootswaterwalking",
+      "videoUrl": "https://youtu.be/tHTQJpTejDM",
+      "level": null
+    },
+    {
+      "id": "poi",
+      "name": "Pits of Inferno (POI)",
+      "type": "Quest",
+      "summary": "Large multi-stage dungeon quest. Bring supplies and a team.",
+      "pageUrl": "/?subtopic=poiquest",
+      "videoUrl": "https://youtu.be/mmw7df9wO44",
+      "level": "120+",
+      "location": {
+        "x": 32145,
+        "y": 32101,
+        "z": 11,
+        "label": "POI Entrance Lever"
+      }
+    },
+    {
+      "id": "demona",
+      "name": "Demona Warlock & Magician Cave",
+      "type": "Hunt",
+      "summary": "Warlock and magician hunting spot near Demona. High profit potential.",
+      "pageUrl": "/?subtopic=demona",
+      "videoUrl": "https://www.youtube.com/watch?v=NvWxqzZBxP0",
+      "level": "150+",
+      "location": {
+        "x": 33238,
+        "y": 32052,
+        "z": 11,
+        "label": "Demona Warlock Cave"
+      }
+    },
+    {
+      "id": "fury",
+      "name": "Fury Gate – Carlin",
+      "type": "Hunt",
+      "summary": "Fury hunting area accessible through Carlin's Fury Gate.",
+      "pageUrl": "/?subtopic=fury",
+      "videoUrl": "https://www.youtube.com/watch?v=9HGor72Zpbc",
+      "level": "100+",
+      "location": {
+        "x": 33397,
+        "y": 32042,
+        "z": 5,
+        "label": "Fury Gate Hunt Area"
+      }
+    },
+    {
+      "id": "warlock_yalahar",
+      "name": "Yalahar Warlock Cave",
+      "type": "Hunt",
+      "summary": "Warlock cave in Yalahar with good experience and loot.",
+      "pageUrl": "/?subtopic=warlock",
+      "videoUrl": "https://www.youtube.com/watch?v=tKyVhK4h5pU",
+      "level": "150+",
+      "location": {
+        "x": 1392,
+        "y": 1028,
+        "z": 4,
+        "label": "Yalahar Warlock Cave"
+      }
+    },
+    {
+      "id": "hydraph",
+      "name": "Hydras Port Hope + Extension",
+      "type": "Hunt",
+      "summary": "Hydra hunting in Port Hope including the extension area.",
+      "pageUrl": "/?subtopic=hydraph",
+      "videoUrl": "https://www.youtube.com/watch?v=ZMaFUqbCmew",
+      "level": "150+",
+      "location": {
+        "x": 33006,
+        "y": 32632,
+        "z": 4,
+        "label": "Port Hope Hydras"
+      }
+    },
+    {
+      "id": "hydraph_hydrana",
+      "name": "Hydras in Hydrana",
+      "type": "Hunt",
+      "summary": "Alternative hydra spawn in Hydrana for mid-high level players.",
+      "pageUrl": "/?subtopic=hydraph",
+      "videoUrl": "https://www.youtube.com/watch?v=7s3bkSWxLko",
+      "level": "120+",
+      "location": {
+        "x": 33145,
+        "y": 32178,
+        "z": 7,
+        "label": "Hydrana Boat (Green Island)"
+      }
+    },
+    {
+      "id": "royalcastle",
+      "name": "Royal Castle Island",
+      "type": "Hunt",
+      "summary": "End-game hunting on Royal Castle Island.",
+      "pageUrl": "/?subtopic=royalcastle",
+      "videoUrl": "https://www.youtube.com/watch?v=gp2XHitslg0",
+      "level": "200+"
+    },
+    {
+      "id": "barbarian",
+      "name": "Barbarian Hunt",
+      "type": "Hunt",
+      "summary": "Barbarians Isle — high-level hunt with strong monsters and loot.",
+      "pageUrl": "/?subtopic=barbarian",
+      "videoUrl": "https://youtu.be/6KBJgVUCVSU",
+      "level": "450+",
+      "location": {
+        "x": 32194,
+        "y": 30806,
+        "z": 6,
+        "label": "Barbarians Isle"
+      }
+    },
+    {
+      "id": "forgesystem",
+      "name": "Forge System",
+      "type": "System",
+      "summary": "Custom forge system to upgrade and enhance your equipment.",
+      "pageUrl": "/?subtopic=forgesystem",
+      "videoUrl": "https://www.youtube.com/watch?v=saqwEFwY_v8",
+      "level": null,
+      "location": {
+        "x": 32397,
+        "y": 32191,
+        "z": 7,
+        "label": "Thais Forge — Anvil"
+      }
+    },
+    {
+      "id": "craft",
+      "name": "Craft System",
+      "type": "System",
+      "summary": "Craft custom items using the KarmaOT crafting system.",
+      "pageUrl": "/?subtopic=craft",
+      "videoUrl": "https://www.youtube.com/watch?v=GR_KvD2v1HQ",
+      "level": null,
+      "location": {
+        "x": 32394,
+        "y": 32191,
+        "z": 7,
+        "label": "Thais Forge — Workbench"
+      }
+    }
+  ],
+  "cityHunts": [
+    {
+      "city": "Alva",
+      "pageUrl": "/?Alva",
+      "summary": "Hunt routes and respawns around Alva.",
+      "location": {
+        "x": 33302,
+        "y": 32074,
+        "z": 6,
+        "label": "Alva Boat Dock"
+      }
+    },
+    {
+      "city": "Carlin",
+      "pageUrl": "/?Carlin",
+      "summary": "Hunt routes and respawns around Carlin.",
+      "location": {
+        "x": 32387,
+        "y": 31821,
+        "z": 6,
+        "label": "Carlin Boat Dock"
+      }
+    },
+    {
+      "city": "Darashia",
+      "pageUrl": "/?Darashia",
+      "summary": "Hunt routes and respawns around Darashia.",
+      "location": {
+        "x": 33290,
+        "y": 32481,
+        "z": 6,
+        "label": "Darashia Boat Dock"
+      }
+    },
+    {
+      "city": "Liberty Bay",
+      "pageUrl": "/?LibertyBay",
+      "summary": "Hunt routes and respawns around Liberty Bay.",
+      "location": {
+        "x": 32176,
+        "y": 32951,
+        "z": 6,
+        "label": "Liberty Bay Boat Dock"
+      }
+    },
+    {
+      "city": "Port Hope",
+      "pageUrl": "/?PortHope",
+      "summary": "Hunt routes and respawns around Port Hope.",
+      "location": {
+        "x": 32527,
+        "y": 32784,
+        "z": 6,
+        "label": "Port Hope Boat Dock"
+      }
+    },
+    {
+      "city": "Rookgaard",
+      "pageUrl": "/?Rook",
+      "summary": "Starter island hunts for new players.",
+      "location": {
+        "x": 32209,
+        "y": 31756,
+        "z": 6,
+        "label": "Rookgaard Boat Dock"
+      }
+    },
+    {
+      "city": "Svargrond",
+      "pageUrl": "/?Svargrond",
+      "summary": "Hunt routes and respawns around Svargrond.",
+      "location": {
+        "x": 32300,
+        "y": 30690,
+        "z": 7,
+        "label": "Svargrond Ferry"
+      }
+    },
+    {
+      "city": "Thais",
+      "pageUrl": "/?Thais",
+      "summary": "Hunt routes and respawns around Thais.",
+      "location": {
+        "x": 32312,
+        "y": 32212,
+        "z": 6,
+        "label": "Thais Boat Dock"
+      }
+    },
+    {
+      "city": "Venore",
+      "pageUrl": "/?Venore",
+      "summary": "Hunt routes and respawns around Venore.",
+      "location": {
+        "x": 32954,
+        "y": 32023,
+        "z": 6,
+        "label": "Venore Boat Dock"
+      }
+    },
+    {
+      "city": "Yalahar",
+      "pageUrl": "/?Yalahar",
+      "summary": "Hunt routes and respawns around Yalahar.",
+      "location": {
+        "x": 1359,
+        "y": 1171,
+        "z": 6,
+        "label": "Yalahar Boat Dock"
+      }
+    }
+  ],
+  "levelHunts": [
+    {
+      "name": "DL Cave – Thais",
+      "pageUrl": "/?dlthais",
+      "level": "50+",
+      "summary": "Dragon Lord cave near Thais for mid-level players.",
+      "location": {
+        "x": 32399,
+        "y": 32239,
+        "z": 7,
+        "label": "DL Cave South of Thais"
+      }
+    },
+    {
+      "name": "Fury Gate - Carlin",
+      "pageUrl": "/?fury",
+      "level": "100+",
+      "summary": "Fury Gate hunting area near Carlin.",
+      "location": {
+        "x": 33397,
+        "y": 32042,
+        "z": 5,
+        "label": "Fury Gate Hunt Area"
+      }
+    },
+    {
+      "name": "Wyrm Invasion - Liberty Bay",
+      "pageUrl": "/?warlock",
+      "level": "100+",
+      "summary": "Wyrm invasion event area in Liberty Bay.",
+      "location": {
+        "x": 32296,
+        "y": 32804,
+        "z": 0,
+        "label": "Wyrm Invasion Area"
+      }
+    },
+    {
+      "name": "Daily Boss Lory Mistress - Darashia",
+      "pageUrl": "/?bosslory",
+      "level": "150+",
+      "summary": "Daily boss Lory Mistress in Darashia.",
+      "location": {
+        "x": 33043,
+        "y": 32290,
+        "z": 4,
+        "label": "Lory Mistress Boss Lever"
+      }
+    },
+    {
+      "name": "Shortcut Demona - Carlin",
+      "pageUrl": "/?demona",
+      "level": "150+",
+      "summary": "Demona shortcut and warlock cave access from Carlin.",
+      "location": {
+        "x": 33238,
+        "y": 32052,
+        "z": 11,
+        "label": "Demona Cave Entrance"
+      }
+    },
+    {
+      "name": "Lory Keeper - Darashia",
+      "pageUrl": "/?lorys",
+      "level": "150+",
+      "summary": "Lory Keeper hunting area in Darashia.",
+      "location": {
+        "x": 33053,
+        "y": 32289,
+        "z": 3,
+        "label": "Lory Keeper Area"
+      }
+    },
+    {
+      "name": "Dangerous Cave – North of Carlin",
+      "pageUrl": "/?sea_north_carlin",
+      "level": "150+",
+      "summary": "Dangerous cave north of Carlin for experienced hunters."
+    },
+    {
+      "name": "Dragon Island - Thais",
+      "pageUrl": "/?thaisdragon",
+      "level": "150+",
+      "summary": "Dragon Island hunting spot near Thais.",
+      "location": {
+        "x": 1099,
+        "y": 1311,
+        "z": 3,
+        "label": "Dragon Island"
+      }
+    },
+    {
+      "name": "Warlock Invasion - Yalahar",
+      "pageUrl": "/?warlock",
+      "level": "150+",
+      "summary": "Warlock invasion area in Yalahar.",
+      "location": {
+        "x": 1392,
+        "y": 1028,
+        "z": 4,
+        "label": "Yalahar Warlock Cave"
+      }
+    },
+    {
+      "name": "Frozen Hero Invasion - Svargrond",
+      "pageUrl": "/?frozen",
+      "level": "150+",
+      "summary": "Frozen Hero invasion near Svargrond.",
+      "location": {
+        "x": 32108,
+        "y": 30523,
+        "z": 9,
+        "label": "Frozen Hero Area"
+      }
+    },
+    {
+      "name": "Fast Shop & DP",
+      "pageUrl": "/?fastshop",
+      "level": "150+",
+      "summary": "Fast shop and depot access area.",
+      "location": {
+        "x": 32394,
+        "y": 32191,
+        "z": 7,
+        "label": "Fast Shop — Thais Depot"
+      }
+    },
+    {
+      "name": "Darkness Dragon - Calcanea Island",
+      "pageUrl": "/?darkness",
+      "level": "200+",
+      "summary": "Darkness Dragon hunt on Calcanea Island.",
+      "location": {
+        "x": 31821,
+        "y": 32226,
+        "z": 7,
+        "label": "Darkness Dragon — Calcanea"
+      }
+    },
+    {
+      "name": "Grim Reaper - Deeper Drefia",
+      "pageUrl": "/?grimreaper",
+      "level": "200+",
+      "summary": "Grim Reaper hunting in Deeper Drefia.",
+      "location": {
+        "x": 1333,
+        "y": 912,
+        "z": 7,
+        "label": "Grim Reaper — Deeper Drefia"
+      }
+    },
+    {
+      "name": "Serpent and Hellspawn - Goroma",
+      "pageUrl": "/?serpent",
+      "level": "200+",
+      "summary": "Serpent and Hellspawn spawns on Goroma.",
+      "location": {
+        "x": 31807,
+        "y": 32598,
+        "z": 7,
+        "label": "Goroma — Serpent & Hellspawn"
+      }
+    },
+    {
+      "name": "Nokmir - West Thais",
+      "pageUrl": "/?nokmirthais",
+      "level": "200+",
+      "summary": "Nokmir hunting area west of Thais.",
+      "location": {
+        "x": 32943,
+        "y": 30757,
+        "z": 1,
+        "label": "Nokmir — West Thais"
+      }
+    },
+    {
+      "name": "Daily Boss Balrog - Kazz",
+      "pageUrl": "/?balrog",
+      "level": "250+",
+      "summary": "Daily Balrog boss fight in Kazz.",
+      "location": {
+        "x": 32735,
+        "y": 31954,
+        "z": 14,
+        "label": "Balrog Boss Area"
+      }
+    },
+    {
+      "name": "Demon Knight Area",
+      "pageUrl": "/?demon_knight",
+      "level": "250+",
+      "summary": "Demon Knight hunting area for high levels.",
+      "location": {
+        "x": 1418,
+        "y": 1187,
+        "z": 8,
+        "label": "Demon Knight Area"
+      }
+    },
+    {
+      "name": "Milenar Dragon - Alzude",
+      "pageUrl": "/?milenar",
+      "level": "250+",
+      "summary": "Milenar Dragon hunt in Alzude.",
+      "location": {
+        "x": 31772,
+        "y": 32205,
+        "z": 3,
+        "label": "Milenar Dragon — Alzude"
+      }
+    },
+    {
+      "name": "Dark Torturer Temple",
+      "pageUrl": "/?darktorturer",
+      "level": "300+",
+      "summary": "Dark Torturer temple for end-game players.",
+      "location": {
+        "x": 31627,
+        "y": 31639,
+        "z": 5,
+        "label": "Dark Torturer Temple"
+      }
+    },
+    {
+      "name": "Mystical Tower",
+      "pageUrl": "/?mystical",
+      "level": "300+",
+      "summary": "Mystical Tower high-level hunting area.",
+      "location": {
+        "x": 32743,
+        "y": 33091,
+        "z": 8,
+        "label": "Mystical Tower"
+      }
+    },
+    {
+      "name": "Skull Dragon Castle",
+      "pageUrl": "/?skulldragon",
+      "level": "300+",
+      "summary": "Skull Dragon Castle end-game hunt.",
+      "location": {
+        "x": 1006,
+        "y": 1222,
+        "z": 8,
+        "label": "Skull Dragon Castle"
+      }
+    },
+    {
+      "name": "Hydra Pharaoh Temple",
+      "pageUrl": "/?hydraph",
+      "level": "350+",
+      "summary": "Hydra Pharaoh Temple for very high levels.",
+      "location": {
+        "x": 33223,
+        "y": 32176,
+        "z": 3,
+        "label": "Hydra Pharaoh Temple"
+      }
+    },
+    {
+      "name": "Yalahar Quarter (east)",
+      "pageUrl": "/?yalaharquarter",
+      "level": "350+",
+      "summary": "East quarter of Yalahar with strong monsters.",
+      "location": {
+        "x": 1359,
+        "y": 1171,
+        "z": 6,
+        "label": "Yalahar East Quarter Dock"
+      }
+    },
+    {
+      "name": "White Magician Island",
+      "pageUrl": "/?whitemagician",
+      "level": "350+",
+      "summary": "White Magician Island end-game area.",
+      "location": {
+        "x": 32655,
+        "y": 31876,
+        "z": 1,
+        "label": "White Magician Island"
+      }
+    },
+    {
+      "name": "Queen Medusa",
+      "pageUrl": "/?queenmedusa",
+      "level": "400+",
+      "summary": "Queen Medusa boss area.",
+      "location": {
+        "x": 31772,
+        "y": 30363,
+        "z": 4,
+        "label": "Queen Medusa Area"
+      }
+    },
+    {
+      "name": "Spider Queen Isle",
+      "pageUrl": "/?spiderqueen",
+      "level": "400+",
+      "summary": "Spider Queen Isle for top-level hunters.",
+      "location": {
+        "x": 32365,
+        "y": 31057,
+        "z": 6,
+        "label": "Spider Queen Isle"
+      }
+    },
+    {
+      "name": "White Magician Tower",
+      "pageUrl": "/?whitemagiciantower",
+      "level": "400+",
+      "summary": "White Magician Tower high-level hunt.",
+      "location": {
+        "x": 33062,
+        "y": 32160,
+        "z": 3,
+        "label": "White Magician Tower"
+      }
+    },
+    {
+      "name": "Darashia Pharaoh Tomb",
+      "pageUrl": "/?darapharao",
+      "level": "450+",
+      "summary": "Pharaoh tomb in Darashia for elite players.",
+      "location": {
+        "x": 33043,
+        "y": 32290,
+        "z": 4,
+        "label": "Darashia Pharaoh Tomb Area"
+      }
+    },
+    {
+      "name": "Banuta Queen",
+      "pageUrl": "/?banutaqueen",
+      "level": "450+",
+      "summary": "Banuta Queen area — one of the hardest hunts."
+    },
+    {
+      "name": "Barbarians Isle",
+      "pageUrl": "/?barbarian",
+      "level": "450+",
+      "summary": "Barbarians Isle — end-game hunting ground.",
+      "location": {
+        "x": 32194,
+        "y": 30806,
+        "z": 6,
+        "label": "Barbarians Isle"
+      }
+    }
+  ]
+}

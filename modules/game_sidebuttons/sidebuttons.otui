@@ -1,5 +1,5 @@
 NonClosableMiniWindow
-  height: 50
+  height: 74
   id: sideButtonsWindow
   @onClose: modules.game_inventory.onMiniWindowClose()
   &save: true
@@ -60,3 +60,13 @@ NonClosableMiniWindow
       margin-top: 2
       color: #ebd513
       @onClick: modules.game_hunteranalyzer.toggle()
+
+    InventoryButton
+      !text: tr('Guide')
+      anchors.left: parent.left
+      anchors.top: prev.bottom
+      anchors.right: prev.right
+      height: 20
+      margin-top: 2
+      color: #b08f58
+      @onClick: modules.game_guides.toggle()

@@ -37,6 +37,7 @@ Module
     - game_stats
     - game_shaders
     - game_wiki
+    - game_guides
     - game_itemrarity
     - game_pix
 
